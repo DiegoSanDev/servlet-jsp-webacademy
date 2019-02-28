@@ -6,6 +6,12 @@
   - Anil Hemrajani
 </p>
 # Tecnologias utilizadas
-<ul Servlet>
-  
+<ul>
+  <li>Servlet</li>
+  <li>JSP</li>
+  <li>HTML</li>
+  <li>CSS</li>
+  <li>JavaScript</li>
+  <li>JQuery</li>
+  <li>PostgresSQL</li>
 </ul>
