@@ -39,7 +39,7 @@ public class AlunoDAO implements IDAO<Aluno> {
 					aluno.setRg(result.getString("rg"));
 					aluno.setEmail(result.getString("email"));
 					aluno.setNome(result.getString("nome"));
-					aluno.setDataCadastro(result.getDate("data_nascimento").toLocalDate());
+					aluno.setDataNascimento(result.getDate("data_nascimento").toLocalDate());
 					return aluno;
 				}
 			} catch (SQLException e) {
@@ -94,8 +94,30 @@ public class AlunoDAO implements IDAO<Aluno> {
 	}
 
 	@Override
-	public boolean atualizar(Aluno t) throws SQLException {
+	public boolean atualizar(Aluno aluno) throws SQLException {
 
+		StringBuilder sql = null;
+		PreparedStatement statement = null;
+		try {
+			sql = new StringBuilder();
+			sql.append("UPDATE aluno SET ");
+			sql.append("nome = ?, email = ?, cpf = ?, rg = ?, data_nascimento = ?");
+			sql.append("WHERE id = ").append(aluno.getId());
+			statement = this.connection.prepareStatement(sql.toString());
+			statement.setString(1, aluno.getNome());
+			statement.setString(2, aluno.getEmail());
+			statement.setString(3, aluno.getCpf());
+			statement.setString(4, aluno.getRg());
+			statement.setDate(5, Date.valueOf(aluno.getDataNascimento()));
+			if (statement.executeUpdate() == 1) {
+				return true;
+			}
+		} catch (SQLException e) {
+			throw e;
+		} finally {
+			sql.delete(0, sql.length());
+			statement = null;
+		}
 		return false;
 	}
 
@@ -117,18 +139,14 @@ public class AlunoDAO implements IDAO<Aluno> {
 		return null;
 	}
 
+	// apenas para teste...
+	@Deprecated
 	public static void main(String[] args) {
-
-		Aluno aluno = new Aluno();
-		aluno.setCpf("----");
-		aluno.setDataNascimento(LocalDate.now());
-		aluno.setEmail("---");
-		aluno.setNome("---");
-		aluno.setRg("---");
 
 		AlunoDAO dao = new AlunoDAO(Conexao.conexao());
 		try {
-			dao.inserir(aluno);
+			Aluno aluno = dao.buscarPoId(27);
+			dao.atualizar(aluno);
 			Conexao.conexao().close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
