@@ -13,7 +13,7 @@ public interface IDAO<T> {
 
 	boolean deletar(T t) throws SQLException;
 
-	boolean deletarPoID(int id);
+	boolean deletarPoID(int id) throws SQLException;
 
-	List<T> todos();
+	List<T> todos() throws SQLException;
 }

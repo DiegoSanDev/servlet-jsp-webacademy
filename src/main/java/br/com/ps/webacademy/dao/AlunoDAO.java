@@ -5,7 +5,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.ps.webacademy.beans.Aluno;
@@ -122,21 +122,83 @@ public class AlunoDAO implements IDAO<Aluno> {
 	}
 
 	@Override
-	public boolean deletar(Aluno t) throws SQLException {
-		// TODO Auto-generated method stub
+	public boolean deletar(Aluno aluno) throws SQLException {
+
+		StringBuilder sql = null;
+		PreparedStatement statement = null;
+		try {
+			sql = new StringBuilder();
+			sql.append("DELETE FROM aluno ");
+			sql.append("WHERE id = ?");
+			statement = this.connection.prepareStatement(sql.toString());
+			statement.setInt(1, aluno.getId());
+			if (!statement.execute()) {
+				return true;
+			}
+		} catch (SQLException e) {
+			throw e;
+		} finally {
+			sql.delete(0, sql.length());
+			statement = null;
+		}
 		return false;
 	}
 
 	@Override
-	public boolean deletarPoID(int id) {
-		// TODO Auto-generated method stub
+	public boolean deletarPoID(int id) throws SQLException {
+		StringBuilder sql = null;
+		PreparedStatement statement = null;
+		try {
+			sql = new StringBuilder();
+			sql.append("DELETE FROM aluno ");
+			sql.append("WHERE id = ?");
+			statement = this.connection.prepareStatement(sql.toString());
+			statement.setInt(1, id);
+			if (!statement.execute()) {
+				return true;
+			}
+		} catch (SQLException e) {
+			throw e;
+		} finally {
+			sql.delete(0, sql.length());
+			statement = null;
+		}
 		return false;
 	}
 
 	@Override
-	public List<Aluno> todos() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Aluno> todos() throws SQLException {
+
+		StringBuilder sql = null;
+		PreparedStatement statement = null;
+		ResultSet result = null;
+		List<Aluno> alunos = new ArrayList<>();
+		try {
+			sql = new StringBuilder();
+			sql.append("SELECT id,nome,email,cpf,rg,data_nascimento FROM aluno ");
+			statement = this.connection.prepareStatement(sql.toString());
+			result = statement.executeQuery();
+			if (result != null) {
+				alunos = new ArrayList<>();
+				while (result.next()) {
+					Aluno aluno = new Aluno();
+					aluno.setId(result.getInt("id"));
+					aluno.setCpf(result.getString("cpf"));
+					aluno.setRg(result.getString("rg"));
+					aluno.setEmail(result.getString("email"));
+					aluno.setNome(result.getString("nome"));
+					aluno.setDataNascimento(result.getDate("data_nacimento").toLocalDate());
+					alunos.add(aluno);
+				}
+			}
+		} catch (SQLException e) {
+			throw e;
+		} finally {
+			sql.delete(0, sql.length());
+			statement = null;
+			result = null;
+		}
+		return alunos;
 	}
 
 	// apenas para teste...
@@ -146,7 +208,7 @@ public class AlunoDAO implements IDAO<Aluno> {
 		AlunoDAO dao = new AlunoDAO(Conexao.conexao());
 		try {
 			Aluno aluno = dao.buscarPoId(27);
-			dao.atualizar(aluno);
+			dao.deletar(aluno);
 			Conexao.conexao().close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
