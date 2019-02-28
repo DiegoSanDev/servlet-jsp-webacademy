@@ -7,15 +7,22 @@
 </p>
 <h3>Tecnologias utilizadas</h3>
 <ul>
+  <li>PostgresSQL
+    <ul>
+      <li>Versão: 9.6</li>
+      <li> <a href="https://getbootstrap.com/docs/4.3/getting-started/introduction/" target="_blank">Documentação</a> </li>
+    </ul>
+  </li>
+  <li>JDBC</li>
   <li>Servlet</li>
   <li>JSP</li>
   <li>HTML</li>
   <li>CSS</li>
   <li>JavaScript</li>
   <li>JQuery</li>
-  <li>PostgresSQL
+  <li>Bootstrap
     <ul>
-      <li>Versão: 9.6</li>
+      <li>Versão: 4.3</li>
       <li> <a href="https://www.postgresql.org/docs/9.6/index.html" target="_blank">Documentação</a> </li>
     </ul>
   </li>
