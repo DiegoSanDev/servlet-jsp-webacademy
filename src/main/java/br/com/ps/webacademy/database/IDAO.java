@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface IDAO<T> {
 
-	T buscarPoId(int id);
+	T buscarPoId(int id) throws SQLException;
 
 	boolean inserir(T t) throws SQLException;
 
