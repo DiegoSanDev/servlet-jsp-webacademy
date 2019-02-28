@@ -14,6 +14,7 @@
     </ul>
   </li>
   <li>JDBC</li>
+  <li>SQL</li>
   <li>Servlet</li>
   <li>JSP</li>
   <li>HTML</li>
