@@ -7,6 +7,12 @@
 </p>
 <h3>Tecnologias utilizadas</h3>
 <ul>
+  <li>Maven
+    <ul>
+      <li>Versão: 4.0.0</li>
+      <li> <a href="http://maven.apache.org/" target="_blank">Documentação</a> </li>
+    </ul>
+  </li>
   <li>PostgresSQL
     <ul>
       <li>Versão: 9.6</li>
