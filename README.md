@@ -16,7 +16,7 @@
   <li>PostgresSQL
     <ul>
       <li>Versão: 9.6</li>
-      <li> <a href="https://getbootstrap.com/docs/4.3/getting-started/introduction/" target="_blank">Documentação</a> </li>
+      <li> <a href="https://www.postgresql.org/docs/9.6/index.html" target="_blank">Documentação</a> </li>
     </ul>
   </li>
   <li>JDBC</li>
