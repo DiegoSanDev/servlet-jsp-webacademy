@@ -70,7 +70,7 @@ public class AlunoDAO implements IDAO<Aluno> {
 			statement.setString(2, aluno.getEmail());
 			statement.setString(3, aluno.getCpf());
 			statement.setString(4, aluno.getRg());
-			statement.setDate(5, Date.valueOf(aluno.getDataNascimento()));
+			statement.setDate(5, aluno.getDataNascimento() != null ? Date.valueOf(aluno.getDataNascimento()) : null);
 			statement.setString(6, String.valueOf(aluno.getSexo()));
 			statement.setString(7, aluno.getCelular());
 
@@ -103,16 +103,16 @@ public class AlunoDAO implements IDAO<Aluno> {
 		StringBuilder sql = null;
 		PreparedStatement statement = null;
 		try {
-			sql = new StringBuilder();
-			sql.append("UPDATE aluno SET ");
-			sql.append("nome = ?, email = ?, cpf = ?, rg = ?, data_nascimento = ?,sexo = ?, celular = ?,matricula = ? ");
+			sql = new StringBuilder("UPDATE aluno SET ");
+			sql.append("nome = ?, email = ?, cpf = ?, rg = ?, data_nascimento = ?, ");
+			sql.append("sexo = ?, celular = ?,matricula = ? ");
 			sql.append("WHERE id = ").append(aluno.getId());
 			statement = this.connection.prepareStatement(sql.toString());
 			statement.setString(1, aluno.getNome());
 			statement.setString(2, aluno.getEmail());
 			statement.setString(3, aluno.getCpf());
 			statement.setString(4, aluno.getRg());
-			statement.setDate(5, Date.valueOf(aluno.getDataNascimento()));
+			statement.setDate(5, aluno.getDataNascimento() != null ? Date.valueOf(aluno.getDataNascimento()) : null);
 			statement.setString(6, String.valueOf(aluno.getSexo()));
 			statement.setString(7, aluno.getCelular());
 			statement.setString(8, aluno.getMatricula());

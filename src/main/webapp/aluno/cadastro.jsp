@@ -75,7 +75,7 @@
 			  </div>
 			</div>
 			
-			<form>
+			<form action="<%=request.getContextPath()%>/aluno/cadastro" method="POST">
 			  <div class="form-row">
 			  	<div class="form-group col-md-4">
 			      <label for="matricula" class="col-form-label col-form-label-sm" >Matricula:</label>
@@ -109,7 +109,7 @@
 			    <div class="form-group col-md-2">
 			      <label for="sexo" class="col-form-label col-form-label-sm">Sexo:</label>
 			      <select id="sexo" name="sexo" class="form-control form-control-sm">
-			        <option selected>Selecione...</option>
+			        <option value="" selected>Selecione...</option>
 			        <option value="M" >Masculino</option>
 			        <option value="F" >Feminino</option>
 			      </select>
