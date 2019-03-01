@@ -9,11 +9,11 @@
   
   <dependencies>
   
-  	<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+  	<!-- PostgreSQL -->
 	<dependency>
-	    <groupId>org.postgresql</groupId>
-	    <artifactId>postgresql</artifactId>
-	    <version>9.4.1212</version>
+		<groupId>org.postgresql</groupId>
+		<artifactId>postgresql</artifactId>
+		<version>42.2.4</version>
 	</dependency>
 	  	
   </dependencies>
