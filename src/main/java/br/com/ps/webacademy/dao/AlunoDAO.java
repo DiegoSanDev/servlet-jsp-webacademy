@@ -105,8 +105,7 @@ public class AlunoDAO implements IDAO<Aluno> {
 		try {
 			sql = new StringBuilder();
 			sql.append("UPDATE aluno SET ");
-			sql.append(
-					"nome = ?, email = ?, cpf = ?, rg = ?, data_nascimento = ?,sexo = ?, celular = ?,matricula = ? ");
+			sql.append("nome = ?, email = ?, cpf = ?, rg = ?, data_nascimento = ?,sexo = ?, celular = ?,matricula = ? ");
 			sql.append("WHERE id = ").append(aluno.getId());
 			statement = this.connection.prepareStatement(sql.toString());
 			statement.setString(1, aluno.getNome());
