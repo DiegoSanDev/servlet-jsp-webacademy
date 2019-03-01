@@ -184,7 +184,8 @@ public class AlunoDAO implements IDAO<Aluno> {
 		List<Aluno> alunos = new ArrayList<>();
 		try {
 			sql = new StringBuilder();
-			sql.append("SELECT id,nome,email,cpf,rg,data_nascimento FROM aluno ");
+			sql.append("SELECT id,nome,email,cpf,rg,data_nascimento,sexo,celular,matricula ");
+			sql.append("FROM aluno");
 			statement = this.connection.prepareStatement(sql.toString());
 			result = statement.executeQuery();
 			if (result != null) {
