@@ -13,19 +13,33 @@ public class Transacao {
 		connection.setAutoCommit(false);
 	}
 
-	public static synchronized void finalizar(Connection connection) throws SQLException {
+	public static synchronized void finalizar(Connection connection) {
 		try {
 			connection.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		} finally {
-			connection.setAutoCommit(true);
+			try {
+				connection.setAutoCommit(true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
-	public static synchronized void cancelar(Connection connection) throws SQLException {
+	public static synchronized void cancelar(Connection connection) {
 		try {
-			connection.rollback();
+			try {
+				connection.rollback();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		} finally {
-			connection.setAutoCommit(true);
+			try {
+				connection.setAutoCommit(true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

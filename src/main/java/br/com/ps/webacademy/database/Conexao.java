@@ -23,4 +23,15 @@ public class Conexao {
 		}
 		return connection;
 	}
+	
+	public static void fechar() {
+		if(connection != null) {
+			try {
+				connection.close();
+				connection = null;
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }
