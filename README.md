@@ -43,4 +43,4 @@ Segundo Heuser (2010, p.25), um modelo conceitual, “é uma descrição do banc
  Conforme Heuser (2019, p.25), a técnica de modelagem conceitual mais difundida é a abordagem entidade-relacionamento (ER). “Nesta técnica, um modelo conceitual é usualmente representado através de um diagrama, chamado diagrama entidade-relacionamento (DER)”. 
 </p>
 
- <img src="https://github.com/DiegoSanDev/servlet-jsp-webacademy/issues/1#issue-415885554">
+ <img src="https://github.com/DiegoSanDev/servlet-jsp-webacademy/issues/1#issue-415885554.png">
