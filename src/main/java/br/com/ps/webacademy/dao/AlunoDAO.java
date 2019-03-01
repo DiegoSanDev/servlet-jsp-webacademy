@@ -63,7 +63,7 @@ public class AlunoDAO implements IDAO<Aluno> {
 		ResultSet result = null;
 		try {
 			sql = new StringBuilder("INSERT INTO aluno");
-			sql.append("(nome,email,cpf,rg,data_nascimento,sexo) ");
+			sql.append("(nome,email,cpf,rg,data_nascimento,sexo,celular) ");
 			sql.append("VALUES(?,?,?,?,?,?,?)");
 			statement = this.connection.prepareStatement(sql.toString(), PreparedStatement.RETURN_GENERATED_KEYS);
 			statement.setString(1, aluno.getNome());
