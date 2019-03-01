@@ -9,3 +9,5 @@ CREATE TABLE aluno(
     data_alteracao DATE,
     CONSTRAINT pk_aluno PRIMARY KEY(id)
 );
+
+ALTER TABLE aluno ADD COLUMN sexo char(1);
