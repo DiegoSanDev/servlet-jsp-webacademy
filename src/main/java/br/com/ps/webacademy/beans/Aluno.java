@@ -11,6 +11,8 @@ public class Aluno extends BeanBase {
 	private String email;
 	private LocalDate dataNascimento;
 	private char sexo;
+	private String celular;
+	private String matricula;
 
 	public Aluno() {
 	}
@@ -61,5 +63,21 @@ public class Aluno extends BeanBase {
 
 	public void setSexo(char sexo) {
 		this.sexo = sexo;
+	}
+
+	public String getCelular() {
+		return celular;
+	}
+
+	public void setCelular(String celular) {
+		this.celular = celular;
+	}
+
+	public String getMatricula() {
+		return matricula;
+	}
+
+	public void setMatricula(String matricula) {
+		this.matricula = matricula;
 	}
 }

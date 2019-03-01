@@ -5,12 +5,10 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.ps.webacademy.beans.Aluno;
-import br.com.ps.webacademy.database.Conexao;
 import br.com.ps.webacademy.database.IDAO;
 
 public class AlunoDAO implements IDAO<Aluno> {
@@ -42,6 +40,8 @@ public class AlunoDAO implements IDAO<Aluno> {
 					aluno.setNome(result.getString("nome"));
 					aluno.setDataNascimento(result.getDate("data_nascimento").toLocalDate());
 					aluno.setSexo(result.getString("sexo").charAt(0));
+					aluno.setCelular(result.getString("celular"));
+					aluno.setMatricula(result.getString("matricula"));
 					return aluno;
 				}
 			} catch (SQLException e) {
@@ -64,7 +64,7 @@ public class AlunoDAO implements IDAO<Aluno> {
 		try {
 			sql = new StringBuilder("INSERT INTO aluno");
 			sql.append("(nome,email,cpf,rg,data_nascimento,sexo) ");
-			sql.append("VALUES(?,?,?,?,?,?)");
+			sql.append("VALUES(?,?,?,?,?,?,?)");
 			statement = this.connection.prepareStatement(sql.toString(), PreparedStatement.RETURN_GENERATED_KEYS);
 			statement.setString(1, aluno.getNome());
 			statement.setString(2, aluno.getEmail());
@@ -72,6 +72,7 @@ public class AlunoDAO implements IDAO<Aluno> {
 			statement.setString(4, aluno.getRg());
 			statement.setDate(5, Date.valueOf(aluno.getDataNascimento()));
 			statement.setString(6, String.valueOf(aluno.getSexo()));
+			statement.setString(7, aluno.getCelular());
 
 			if (statement.executeUpdate() == 1) {
 				result = statement.getGeneratedKeys();
@@ -104,7 +105,8 @@ public class AlunoDAO implements IDAO<Aluno> {
 		try {
 			sql = new StringBuilder();
 			sql.append("UPDATE aluno SET ");
-			sql.append("nome = ?, email = ?, cpf = ?, rg = ?, data_nascimento = ?,sexo = ?");
+			sql.append(
+					"nome = ?, email = ?, cpf = ?, rg = ?, data_nascimento = ?,sexo = ?, celular = ?,matricula = ? ");
 			sql.append("WHERE id = ").append(aluno.getId());
 			statement = this.connection.prepareStatement(sql.toString());
 			statement.setString(1, aluno.getNome());
@@ -113,6 +115,8 @@ public class AlunoDAO implements IDAO<Aluno> {
 			statement.setString(4, aluno.getRg());
 			statement.setDate(5, Date.valueOf(aluno.getDataNascimento()));
 			statement.setString(6, String.valueOf(aluno.getSexo()));
+			statement.setString(7, aluno.getCelular());
+			statement.setString(8, aluno.getMatricula());
 			if (statement.executeUpdate() == 1) {
 				return true;
 			}
@@ -176,6 +180,7 @@ public class AlunoDAO implements IDAO<Aluno> {
 		StringBuilder sql = null;
 		PreparedStatement statement = null;
 		ResultSet result = null;
+		Aluno aluno = null;
 		List<Aluno> alunos = new ArrayList<>();
 		try {
 			sql = new StringBuilder();
@@ -185,7 +190,7 @@ public class AlunoDAO implements IDAO<Aluno> {
 			if (result != null) {
 				alunos = new ArrayList<>();
 				while (result.next()) {
-					Aluno aluno = new Aluno();
+					aluno = new Aluno();
 					aluno.setId(result.getInt("id"));
 					aluno.setCpf(result.getString("cpf"));
 					aluno.setRg(result.getString("rg"));
@@ -193,6 +198,8 @@ public class AlunoDAO implements IDAO<Aluno> {
 					aluno.setNome(result.getString("nome"));
 					aluno.setDataNascimento(result.getDate("data_nacimento").toLocalDate());
 					aluno.setSexo(result.getString("sexo").charAt(0));
+					aluno.setCelular(result.getString("celular"));
+					aluno.setMatricula(result.getString("matricula"));
 					alunos.add(aluno);
 				}
 			}
@@ -202,30 +209,8 @@ public class AlunoDAO implements IDAO<Aluno> {
 			sql.delete(0, sql.length());
 			statement = null;
 			result = null;
+			aluno = null;
 		}
 		return alunos;
 	}
-
-	// apenas para teste...
-	@Deprecated
-	public static void main(String[] args) {
-
-		AlunoDAO dao = new AlunoDAO(Conexao.conexao());
-		try {
-			Aluno aluno = new Aluno();
-			aluno.setCpf("00");
-			aluno.setDataNascimento(LocalDate.now());
-			aluno.setEmail("@");
-			aluno.setNome("dpadsf");
-			aluno.setRg("09");
-			aluno.setSexo('M');
-			dao.inserir(aluno);
-			Conexao.conexao().close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
 }

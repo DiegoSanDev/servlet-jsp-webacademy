@@ -11,3 +11,6 @@ CREATE TABLE aluno(
 );
 
 ALTER TABLE aluno ADD COLUMN sexo char(1);
+ALTER TABLE aluno ADD COLUMN celular varchar(15);
+ALTER TABLE aluno ADD COLUMN matricula varchar(10) UNIQUE;
+
