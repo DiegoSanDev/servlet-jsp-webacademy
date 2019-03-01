@@ -59,23 +59,4 @@ public class AlunoService implements IService<Aluno> {
 		}
 		return matricula;
 	}
-
-	public static void main(String[] args) {
-		Aluno aluno = new Aluno();
-		aluno.setCelular("---");
-		aluno.setCpf("---");
-		aluno.setDataNascimento(LocalDate.now());
-		aluno.setEmail("emll");
-		aluno.setMatricula("090");
-		aluno.setNome("REWWA");
-		aluno.setRg("CCCCC");
-		aluno.setSexo('F');
-		AlunoService alunoService = new AlunoService();
-		try {
-			alunoService.salvar(aluno);
-		} catch (RegraNegocioException e) {
-			e.printStackTrace();
-		}
-	}
-
 }
