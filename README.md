@@ -38,6 +38,7 @@
 <h3>Modelo Conceitual</h3>
 <p>
 Segundo Heuser (2010, p.25), um modelo conceitual, “é uma descrição do banco de dados de forma independente de implementação em um SGBD. O modelo conceitual registra que dados podem aparecer no banco de dados, mas não registra como estes dados estão armazenados a nível de SGBD”. 
+  <img src="![mer](https://user-images.githubusercontent.com/48092812/53607928-81800380-3b9f-11e9-88b2-90a4349ad07b.jpg)" width="300" heigth="300"/>
 </p>
 <p>
  Conforme Heuser (2019, p.25), a técnica de modelagem conceitual mais difundida é a abordagem entidade-relacionamento (ER). “Nesta técnica, um modelo conceitual é usualmente representado através de um diagrama, chamado diagrama entidade-relacionamento (DER)”. 
