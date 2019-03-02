@@ -23,6 +23,7 @@
   <li>SQL</li>
   <li>Servlet</li>
   <li>JSP</li>
+  <li>JSTL</li>
   <li>HTML</li>
   <li>CSS</li>
   <li>JavaScript</li>
