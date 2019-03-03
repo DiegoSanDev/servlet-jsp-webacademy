@@ -82,10 +82,11 @@
 					   class="table-striped table-sm">
 					<thead class="text-white" style="background-color: #18227c" >
 						<tr>
-							<th style="width:10%; text-align: center;">Ação</th>
-							<th style="width:5%">ID</th>
-				        	<th style="width:65%">Nome</th>
-				        	<th style="width:20%" >Matricula</th>
+							<th>Ação</th>
+							<th>ID</th>
+				        	<th>Nome</th>
+				        	<th>Matricula</th>
+				        	<th>Responsável</th>
 				        </tr>
 					</thead>
 					<tbody>
@@ -102,6 +103,7 @@
 					          <td>${aluno.id}</td>
 					          <td>${aluno.nome}</td>
 					          <td>${aluno.matricula}</td>
+					          <td>${aluno.responsavel.nome}</td>
 					        </tr>
 				        </c:forEach>
 					</tbody>
