@@ -11,7 +11,7 @@ public class Conexao {
 	public Conexao() {
 	}
 
-	public static synchronized Connection conexao() {
+	public static synchronized Connection abrir() {
 		if (connection == null) {
 			try {
 				Class.forName("org.postgresql.Driver");
