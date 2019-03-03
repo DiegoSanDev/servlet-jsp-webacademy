@@ -13,4 +13,17 @@ CREATE TABLE aluno(
 ALTER TABLE aluno ADD COLUMN sexo char(1);
 ALTER TABLE aluno ADD COLUMN celular varchar(15);
 ALTER TABLE aluno ADD COLUMN matricula varchar(10) UNIQUE;
+ALTER TABLE aluno ADD COLUMN id_responsavel INTEGER;
+
+
+CREATE TABLE responsavel(
+	id SERIAL NOT NULL,
+	nome VARCHAR(200),
+	email VARCHAR(200),
+	celular VARCHAR(14),
+	CONSTRAINT pk_responsavel PRIMARY KEY(id)
+);
+
+ALTER TABLE aluno ADD FOREIGN KEY (id_responsavel) 
+REFERENCES responsavel(id);
 
