@@ -57,7 +57,7 @@ public class AlunoDAO implements IDAO<Aluno> {
 
 	@Override
 	public boolean inserir(Aluno aluno) throws SQLException {
-
+		ResponsavelDAO responsavelDAO = null;
 		StringBuilder sql = null;
 		PreparedStatement statement = null;
 		ResultSet result = null;
@@ -81,6 +81,9 @@ public class AlunoDAO implements IDAO<Aluno> {
 					idAluno = result.getInt("id");
 					if (idAluno > 0) {
 						aluno.setId(idAluno);
+						// persistindo informações do responsável
+						responsavelDAO = new ResponsavelDAO(this.connection);
+						responsavelDAO.inserir(aluno.getResponsavel());
 						return true;
 					}
 				}
@@ -89,6 +92,7 @@ public class AlunoDAO implements IDAO<Aluno> {
 		} catch (SQLException e) {
 			throw e;
 		} finally {
+			responsavelDAO = null;
 			sql.delete(0, sql.length());
 			statement = null;
 			result = null;
@@ -102,10 +106,11 @@ public class AlunoDAO implements IDAO<Aluno> {
 
 		StringBuilder sql = null;
 		PreparedStatement statement = null;
+		ResponsavelDAO responsavelDAO = null;
 		try {
 			sql = new StringBuilder("UPDATE aluno SET ");
 			sql.append("nome = ?, email = ?, cpf = ?, rg = ?, data_nascimento = ?, ");
-			sql.append("sexo = ?, celular = ?,matricula = ? ");
+			sql.append("sexo = ?, celular = ?,matricula = ?, id_responsavel = ? ");
 			sql.append("WHERE id = ").append(aluno.getId());
 			statement = this.connection.prepareStatement(sql.toString());
 			statement.setString(1, aluno.getNome());
@@ -116,7 +121,10 @@ public class AlunoDAO implements IDAO<Aluno> {
 			statement.setString(6, String.valueOf(aluno.getSexo()));
 			statement.setString(7, aluno.getCelular());
 			statement.setString(8, aluno.getMatricula());
+			statement.setInt(9, aluno.getResponsavel().getId());
 			if (statement.executeUpdate() == 1) {
+				responsavelDAO = new ResponsavelDAO(this.connection);
+				responsavelDAO.atualizar(aluno.getResponsavel());
 				return true;
 			}
 		} catch (SQLException e) {
@@ -183,8 +191,10 @@ public class AlunoDAO implements IDAO<Aluno> {
 		List<Aluno> alunos = new ArrayList<>();
 		try {
 			sql = new StringBuilder();
-			sql.append("SELECT id,nome,email,cpf,rg,data_nascimento,sexo,celular,matricula ");
-			sql.append("FROM aluno");
+			sql.append("SELECT a.id,a.nome,a.email,a.matricula,resp.id as id_resp,resp.nome as nome_resp ");
+			sql.append("FROM aluno a ");
+			sql.append("LEFT JOIN responsavel resp ON (a.id_responsavel = resp.id) ");
+			sql.append("ORDER BY a.id ASC");
 			statement = this.connection.prepareStatement(sql.toString());
 			result = statement.executeQuery();
 			if (result != null) {
@@ -192,14 +202,11 @@ public class AlunoDAO implements IDAO<Aluno> {
 				while (result.next()) {
 					aluno = new Aluno();
 					aluno.setId(result.getInt("id"));
-					aluno.setCpf(result.getString("cpf"));
-					aluno.setRg(result.getString("rg"));
 					aluno.setEmail(result.getString("email"));
 					aluno.setNome(result.getString("nome"));
-					//aluno.setDataNascimento(result.getDate("data_nascimento").toLocalDate() != null ? result.getDate("data_nascimento").toLocalDate() : null);
-					aluno.setSexo(result.getString("sexo").charAt(0));
-					aluno.setCelular(result.getString("celular"));
 					aluno.setMatricula(result.getString("matricula"));
+					aluno.getResponsavel().setId(result.getInt("id_resp"));
+					aluno.getResponsavel().setNome(result.getString("nome_resp"));
 					alunos.add(aluno);
 				}
 			}

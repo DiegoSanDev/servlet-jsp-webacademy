@@ -44,6 +44,10 @@ public class AlunoCadastroController extends HttpServlet {
 			String dataNascimento = req.getParameter("dataNascimento");
 			aluno.setDataNascimento(!dataNascimento.isEmpty() ? LocalDate.parse(dataNascimento) : null);
 			aluno.setCelular(req.getParameter("celular"));
+			aluno.getResponsavel().setNome(req.getParameter("respNome"));
+			aluno.getResponsavel().setEmail(req.getParameter("respEmail"));
+			aluno.getResponsavel().setNome(req.getParameter("respNome"));
+			aluno.getResponsavel().setCelular(req.getParameter("respCelular"));
 			if (alunoService.salvar(aluno)) {
 				isSalvo = true;
 			}

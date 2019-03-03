@@ -5,14 +5,15 @@ import java.time.LocalDate;
 @SuppressWarnings("serial")
 public class Aluno extends BeanBase {
 
-	private String nome;
-	private String cpf;
-	private String rg;
-	private String email;
-	private LocalDate dataNascimento;
-	private char sexo;
-	private String celular;
-	private String matricula;
+	private String nome = "";
+	private String cpf = "";
+	private String rg = "";
+	private String email = "";
+	private LocalDate dataNascimento = null;
+	private char sexo = ' ';
+	private String celular = "";
+	private String matricula = "";
+	private Responsavel responsavel = null;
 
 	public Aluno() {
 	}
@@ -79,5 +80,16 @@ public class Aluno extends BeanBase {
 
 	public void setMatricula(String matricula) {
 		this.matricula = matricula;
+	}
+
+	public Responsavel getResponsavel() {
+		if (this.responsavel == null) {
+			this.responsavel = new Responsavel();
+		}
+		return responsavel;
+	}
+
+	public void setResponsavel(Responsavel responsavel) {
+		this.responsavel = responsavel;
 	}
 }
