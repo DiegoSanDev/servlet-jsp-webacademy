@@ -3,6 +3,7 @@ package br.com.ps.webacademy.service;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 
 import br.com.ps.webacademy.beans.Aluno;
 import br.com.ps.webacademy.dao.AlunoDAO;
@@ -15,7 +16,7 @@ public class AlunoService implements IService<Aluno> {
 	@Override
 	public boolean salvar(Aluno aluno) throws RegraNegocioException {
 		boolean isSalvo = false;
-		Connection conexao = Conexao.conexao();
+		Connection conexao = Conexao.abrir();
 		AlunoDAO alunoDAO = null;
 		if (aluno != null) {
 			try {
@@ -44,6 +45,24 @@ public class AlunoService implements IService<Aluno> {
 			}
 		}
 		return isSalvo;
+	}
+
+	@Override
+	public List<Aluno> todos() {
+		AlunoDAO alunoDAO = null;
+		try {
+			alunoDAO = new AlunoDAO(Conexao.abrir());
+			List<Aluno> alunos = alunoDAO.todos();
+			if (alunos != null && !alunos.isEmpty()) {
+				return alunos;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			alunoDAO = null;
+			Conexao.fechar();
+		}
+		return null;
 	}
 
 	private String geraMatricula(Aluno aluno) {

@@ -196,7 +196,7 @@ public class AlunoDAO implements IDAO<Aluno> {
 					aluno.setRg(result.getString("rg"));
 					aluno.setEmail(result.getString("email"));
 					aluno.setNome(result.getString("nome"));
-					aluno.setDataNascimento(result.getDate("data_nacimento").toLocalDate());
+					//aluno.setDataNascimento(result.getDate("data_nascimento").toLocalDate() != null ? result.getDate("data_nascimento").toLocalDate() : null);
 					aluno.setSexo(result.getString("sexo").charAt(0));
 					aluno.setCelular(result.getString("celular"));
 					aluno.setMatricula(result.getString("matricula"));

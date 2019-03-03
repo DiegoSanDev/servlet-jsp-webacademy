@@ -15,16 +15,15 @@ import br.com.ps.webacademy.exception.RegraNegocioException;
 import br.com.ps.webacademy.service.AlunoService;
 
 @SuppressWarnings("serial")
-@WebServlet("/aluno/cadastro")
+@WebServlet("/alunocadastro")
 public class AlunoCadastroController extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		if (doSalvarAluno(req, resp)) {
-			RequestDispatcher dispatcher = req.getRequestDispatcher("/webacademy/aluno/consulta.jsp");
-			dispatcher.forward(req, resp);
+			resp.sendRedirect("alunoconsulta");
 		} else {
-			RequestDispatcher dispatcher = req.getRequestDispatcher("/webacademy/aluno/erro-cadastro.jsp");
+			RequestDispatcher dispatcher = req.getRequestDispatcher("/aluno/erro-cadastro.jsp");
 			dispatcher.forward(req, resp);
 		}
 	}

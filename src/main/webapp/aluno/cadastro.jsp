@@ -66,7 +66,7 @@
 					    		<span>Cadastro de aluno</span>
 					    	</div>
 					    	<div class="col-md-1 offset-md-9">
-					    		<a class="btn btn-primary btn-sm" href="#">
+					    		<a class="btn btn-primary btn-sm" href="<%=request.getContextPath()%>/alunoconsulta">
 					    			<i class="fas fa-list-ul"></i> Consulta
 					    		</a>
 					    	</div>
@@ -75,7 +75,7 @@
 			  </div>
 			</div>
 			
-			<form action="<%=request.getContextPath()%>/aluno/cadastro" method="POST">
+			<form action="<%=request.getContextPath()%>/alunocadastro" method="POST">
 			  <div class="form-row">
 			  	<div class="form-group col-md-4">
 			      <label for="matricula" class="col-form-label col-form-label-sm" >Matricula:</label>
