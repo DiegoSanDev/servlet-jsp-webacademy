@@ -6,8 +6,10 @@ import br.com.ps.webacademy.exception.RegraNegocioException;
 
 public interface IService<T> {
 
+	T buscarPorId(int id) throws RegraNegocioException;
+
 	boolean salvar(T t) throws RegraNegocioException;
-	
+
 	List<T> todos();
 
 }

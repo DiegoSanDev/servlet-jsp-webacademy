@@ -18,14 +18,43 @@ import br.com.ps.webacademy.service.AlunoService;
 @WebServlet("/alunocadastro")
 public class AlunoCadastroController extends HttpServlet {
 
+	private final static String SALVAR = "salvar";
+	private final static String EDITAR = "editar";
+	private final static String EXCLUIR = "excluir";
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		processaRequisicao(req, resp);
+	}
+
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		if (doSalvarAluno(req, resp)) {
-			resp.sendRedirect("alunoconsulta");
-		} else {
-			RequestDispatcher dispatcher = req.getRequestDispatcher("/aluno/erro-cadastro.jsp");
-			dispatcher.forward(req, resp);
+		processaRequisicao(req, resp);
+	}
+
+	private void processaRequisicao(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		String acao = request.getParameter("acao");
+
+		if (acao != null && !acao.isEmpty()) {
+			switch (acao) {
+			case SALVAR:
+				if (doSalvarAluno(request, response)) {
+					response.sendRedirect("alunoconsulta");
+				} else {
+					RequestDispatcher dispatcher = request.getRequestDispatcher("/aluno/erro-cadastro.jsp");
+					dispatcher.forward(request, response);
+				}
+				break;
+			case EDITAR:
+				this.carregar(request, response);
+				break;
+			case EXCLUIR:
+				break;
+			}
 		}
+
 	}
 
 	private boolean doSalvarAluno(HttpServletRequest req, HttpServletResponse resp) {
@@ -35,6 +64,10 @@ public class AlunoCadastroController extends HttpServlet {
 		try {
 			alunoService = new AlunoService();
 			aluno = new Aluno();
+			String idAluno = req.getParameter("idAluno");
+			String idResp = req.getParameter("respID");
+			aluno.setId(idAluno != "" ? Integer.parseInt(idAluno) : 0);
+			aluno.setMatricula(req.getParameter("matricula"));
 			aluno.setNome(req.getParameter("nome"));
 			aluno.setCpf(req.getParameter("cpf"));
 			aluno.setRg(req.getParameter("rg"));
@@ -44,9 +77,9 @@ public class AlunoCadastroController extends HttpServlet {
 			String dataNascimento = req.getParameter("dataNascimento");
 			aluno.setDataNascimento(!dataNascimento.isEmpty() ? LocalDate.parse(dataNascimento) : null);
 			aluno.setCelular(req.getParameter("celular"));
+			aluno.getResponsavel().setId(idResp != "" ? Integer.parseInt(idResp) : 0);
 			aluno.getResponsavel().setNome(req.getParameter("respNome"));
 			aluno.getResponsavel().setEmail(req.getParameter("respEmail"));
-			aluno.getResponsavel().setNome(req.getParameter("respNome"));
 			aluno.getResponsavel().setCelular(req.getParameter("respCelular"));
 			if (alunoService.salvar(aluno)) {
 				isSalvo = true;
@@ -58,5 +91,25 @@ public class AlunoCadastroController extends HttpServlet {
 			alunoService = null;
 		}
 		return isSalvo;
+	}
+
+	private void carregar(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		Aluno aluno = null;
+		AlunoService alunoService = null;
+		try {
+			int id = Integer.parseInt(request.getParameter("idaluno"));
+			alunoService = new AlunoService();
+			aluno = alunoService.buscarPorId(id);
+			if (aluno != null) {
+				request.setAttribute("aluno", aluno);
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/aluno/cadastro.jsp");
+				dispatcher.forward(request, response);
+			}
+		} catch (RegraNegocioException e) {
+			e.printStackTrace();
+		} finally {
+			alunoService = null;
+		}
 	}
 }

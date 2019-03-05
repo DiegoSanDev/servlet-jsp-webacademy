@@ -23,25 +23,32 @@ public class AlunoDAO implements IDAO<Aluno> {
 	public Aluno buscarPoId(int id) throws SQLException {
 		if (id > 0) {
 			Aluno aluno = null;
-			String sql = "";
+			StringBuilder sql = null;
 			ResultSet result = null;
 			PreparedStatement statement = null;
 			try {
-				sql = "SELECT * FROM aluno a WHERE a.id = ?";
-				statement = this.connection.prepareStatement(sql);
+				sql = new StringBuilder();
+				sql.append("SELECT a.id, a.nome,a.email,a.matricula, a.cpf, a.rg, a.data_nascimento, ");
+				sql.append("a.sexo, a.celular, resp.id as resp_id, resp.nome as resp_nome ");
+				sql.append("FROM aluno a ");
+				sql.append("LEFT JOIN responsavel resp ON(a.id_responsavel = resp.id) ");
+				sql.append("WHERE a.id = ?");
+				statement = this.connection.prepareStatement(sql.toString());
 				statement.setInt(1, id);
 				result = statement.executeQuery();
 				if (result.next()) {
 					aluno = new Aluno();
 					aluno.setId(result.getInt("id"));
-					aluno.setCpf(result.getString("cpf"));
-					aluno.setRg(result.getString("rg"));
 					aluno.setEmail(result.getString("email"));
 					aluno.setNome(result.getString("nome"));
-					aluno.setDataNascimento(result.getDate("data_nascimento").toLocalDate());
+					aluno.setMatricula(result.getString("matricula"));
+					aluno.setCpf(result.getString("cpf"));
+					aluno.setRg(result.getString("rg"));
+					aluno.setDataNascimento((result.getDate("data_nascimento")) != null ? result.getDate("data_nascimento").toLocalDate() : null);
 					aluno.setSexo(result.getString("sexo").charAt(0));
 					aluno.setCelular(result.getString("celular"));
-					aluno.setMatricula(result.getString("matricula"));
+					aluno.getResponsavel().setId(result.getInt("resp_id"));
+					aluno.getResponsavel().setNome(result.getString("resp_nome"));
 					return aluno;
 				}
 			} catch (SQLException e) {
@@ -81,9 +88,6 @@ public class AlunoDAO implements IDAO<Aluno> {
 					idAluno = result.getInt("id");
 					if (idAluno > 0) {
 						aluno.setId(idAluno);
-						// persistindo informações do responsável
-						responsavelDAO = new ResponsavelDAO(this.connection);
-						responsavelDAO.inserir(aluno.getResponsavel());
 						return true;
 					}
 				}
@@ -106,11 +110,10 @@ public class AlunoDAO implements IDAO<Aluno> {
 
 		StringBuilder sql = null;
 		PreparedStatement statement = null;
-		ResponsavelDAO responsavelDAO = null;
 		try {
 			sql = new StringBuilder("UPDATE aluno SET ");
 			sql.append("nome = ?, email = ?, cpf = ?, rg = ?, data_nascimento = ?, ");
-			sql.append("sexo = ?, celular = ?,matricula = ?, id_responsavel = ? ");
+			sql.append("sexo = ?, celular = ?, matricula = ?");
 			sql.append("WHERE id = ").append(aluno.getId());
 			statement = this.connection.prepareStatement(sql.toString());
 			statement.setString(1, aluno.getNome());
@@ -121,10 +124,7 @@ public class AlunoDAO implements IDAO<Aluno> {
 			statement.setString(6, String.valueOf(aluno.getSexo()));
 			statement.setString(7, aluno.getCelular());
 			statement.setString(8, aluno.getMatricula());
-			statement.setInt(9, aluno.getResponsavel().getId());
 			if (statement.executeUpdate() == 1) {
-				responsavelDAO = new ResponsavelDAO(this.connection);
-				responsavelDAO.atualizar(aluno.getResponsavel());
 				return true;
 			}
 		} catch (SQLException e) {

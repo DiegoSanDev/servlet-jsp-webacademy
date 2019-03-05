@@ -75,48 +75,58 @@
 			  </div>
 			</div>
 			
-			<form action="<%=request.getContextPath()%>/alunocadastro" method="POST">
+			<form action="<%=request.getContextPath()%>/alunocadastro?acao=salvar" method="POST">
+				
+				<input type="hidden" name="idAluno" id="idAluno" value="${aluno.id}">
+				<input type="hidden" name="respID" id="respID" value="${aluno.responsavel.id}">
+			
 			  <div class="form-row">
 			  	<div class="form-group col-md-4">
 			      <label for="matricula" class="col-form-label col-form-label-sm" >Matricula:</label>
 			      <input type="text" class="form-control form-control-sm" readonly="readonly" 
-			      		 id="matricula" name="matricula" placeholder="0000000000">
+			      		 id="matricula" name="matricula" value="${aluno.matricula}" placeholder="0000000000">
 			    </div>
 			    <div class="form-group col-md-8">
 			      <label for="nome" class="col-form-label col-form-label-sm" >Nome:</label>
-			      <input type="text" class="form-control form-control-sm" id="nome" name="nome" >
+			      <input type="text" class="form-control form-control-sm" 
+			      		 id="nome" name="nome"  value="${aluno.nome}">
 			    </div>
 			  </div>
 			  <div class="form-row">
 			  	<div class="form-group col-md-2">
 			      <label for="cpf" class="col-form-label col-form-label-sm" >CPF:</label>
-			      <input type="text" class="form-control form-control-sm	" id="cpf" name="cpf" placeholder="000.000.000-00">
+			      <input type="text" class="form-control form-control-sm"
+			             id="cpf" name="cpf"  value="${aluno.cpf}"  placeholder="000.000.000-00">
 			    </div>
 			    <div class="form-group col-md-2">
 			      <label for="rg" class="col-form-label col-form-label-sm" >RG:</label>
-			      <input type="text" class="form-control form-control-sm" id="rg" name="rg">
+			      <input type="text" class="form-control form-control-sm" 
+			      		 id="rg" name="rg" value="${aluno.rg}" >
 			    </div>
 			    <div class="form-group col-md-8">
 			      <label for="email" class="col-form-label col-form-label-sm" >Email:</label>
-			      <input type="email" class="form-control form-control-sm" id="email" name="email" >
+			      <input type="email" class="form-control form-control-sm" id="email" name="email" value="${aluno.email}">
 			    </div>
 			  </div>
 			  <div class="form-row">
 			  	<div class="form-group col-md-2">
 			      <label for="dataNascimento" class="col-form-label col-form-label-sm" >Data de nascimento:</label>
-			      <input type="date" class="form-control form-control-sm" id="dataNascimento" name="dataNascimento">
+			      <input type="date" class="form-control form-control-sm" 
+			      	     id="dataNascimento" name="dataNascimento" value="${aluno.dataNascimento}">
 			    </div>
 			    <div class="form-group col-md-2">
 			      <label for="sexo" class="col-form-label col-form-label-sm">Sexo:</label>
-			      <select id="sexo" name="sexo" class="form-control form-control-sm">
-			        <option value="" selected>Selecione...</option>
-			        <option value="M" >Masculino</option>
-			        <option value="F" >Feminino</option>
+			      <select class="form-control form-control-sm"
+			      		  id="sexo" name="sexo" >
+			        <option value="" ${aluno.sexo == "" ? 'selected' : ''}selected>Selecione...</option>
+			        <option value="M" ${aluno.sexo == "M".charAt(0) ? 'selected' : ''}>Masculino</option>
+			        <option value="F" ${aluno.sexo == "F".charAt(0) ? 'selected' : ''}>Feminino</option>
 			      </select>
 			    </div>
 			    <div class="form-group col-md-2">
 			      <label for="celular" class="col-form-label col-form-label-sm" >Celular:</label>
-			      <input type="tel" class="form-control form-control-sm" id="celular" name="celular">
+			      <input type="tel" class="form-control form-control-sm" 
+			      		 id="celular" name="celular" value="${aluno.celular}">
 			    </div>
 			  </div>
 			  
@@ -135,7 +145,7 @@
 				  	<div class="form-group col-md-5">
 				      <label for="respNome" class="col-form-label col-form-label-sm" >Nome:</label>
 				      <input type="text" class="form-control form-control-sm" 
-				      		 id="respNome" name="respNome">
+				      		 id="respNome" name="respNome" value="${aluno.responsavel.nome}">
 				    </div>
 				    <div class="form-group col-md-5">
 				      <label for="respEmail" class="col-form-label col-form-label-sm" >E-mail:</label>

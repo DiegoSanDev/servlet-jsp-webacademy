@@ -14,6 +14,32 @@ import br.com.ps.webacademy.exception.RegraNegocioException;
 public class AlunoService implements IService<Aluno> {
 
 	@Override
+	public Aluno buscarPorId(int id) throws RegraNegocioException {
+		Aluno aluno = null;
+		AlunoDAO alunoDAO = null;
+		if (id > 0) {
+			try {
+				alunoDAO = new AlunoDAO(Conexao.abrir());
+				aluno = alunoDAO.buscarPoId(id);
+				if (aluno != null) {
+					return aluno;
+				} else {
+					throw new RegraNegocioException("Aluno não encontrado.");
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				alunoDAO = null;
+				Conexao.fechar();
+			}
+		} else {
+			throw new RegraNegocioException("ID do aluno não identificado.");
+		}
+
+		return null;
+	}
+
+	@Override
 	public boolean salvar(Aluno aluno) throws RegraNegocioException {
 		boolean isSalvo = false;
 		Connection conexao = Conexao.abrir();
