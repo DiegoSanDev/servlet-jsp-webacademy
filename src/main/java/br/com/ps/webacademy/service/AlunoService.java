@@ -50,7 +50,7 @@ public class AlunoService implements IService<Aluno> {
 				Transacao.iniciar(conexao);
 				if (aluno.getId() == 0) {
 					if (alunoDAO.inserir(aluno)) {
-						aluno.setMatricula(geraMatricula(aluno));
+						aluno.setMatricula(gerarMatricula(aluno));
 						if (alunoDAO.atualizar(aluno)) {
 							isSalvo = true;
 						}
@@ -91,7 +91,7 @@ public class AlunoService implements IService<Aluno> {
 		return null;
 	}
 
-	private String geraMatricula(Aluno aluno) {
+	private String gerarMatricula(Aluno aluno) {
 		String matricula = "";
 		if (aluno != null) {
 			int anoMatricula = LocalDate.now().getYear();

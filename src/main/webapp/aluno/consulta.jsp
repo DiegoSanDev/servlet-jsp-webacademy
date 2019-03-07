@@ -86,7 +86,7 @@
 							<th>ID</th>
 				        	<th>Nome</th>
 				        	<th>Email</th>
-				        	<th>Matricula</th>
+				        	<th>Matrícula</th>
 				        	<th>Responsável</th>
 				        </tr>
 					</thead>
@@ -94,11 +94,15 @@
 						<c:forEach var="aluno" items="${alunos}">
 							<tr>
 							  <td style="text-align: center;">
-					          	<a href="<%=request.getContextPath()%>/alunocadastro?acao=editar&idaluno=${aluno.id}"
-					          	   title="Excluir">
+							  	<a style="margin-left: 10px; margin-right: 10px;" href="<%=request.getContextPath()%>/alunocadastro?acao=arquivoMat&idaluno=${aluno.id}" 
+					          	   title="Matrícula">
+					          		<i class="fas fa-file-alt"></i>
+					          	</a>
+					          	<a style="margin-left: 10px; margin-right: 10px;" href="<%=request.getContextPath()%>/alunocadastro?acao=editar&idaluno=${aluno.id}"
+					          	   title="Editar">
 					          		<i class="fas fa-edit"></i>
 					          	</a>
-					          	<a href="<%=request.getContextPath()%>/alunocadastro?acao=excluir&idaluno=${aluno.id}" 
+					          	<a style="margin-left: 10px; margin-right: 10px;" href="<%=request.getContextPath()%>/alunocadastro?acao=excluir&idaluno=${aluno.id}" 
 					          	   title="Excluir">
 					          		<i class="fas fa-user-times"></i>
 					          	</a>

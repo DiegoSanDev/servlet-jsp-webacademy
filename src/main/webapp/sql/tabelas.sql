@@ -20,7 +20,7 @@ CREATE TABLE responsavel(
 	id SERIAL NOT NULL,
 	nome VARCHAR(200),
 	email VARCHAR(200),
-	celular VARCHAR(14),
+	celular VARCHAR(15),
 	CONSTRAINT pk_responsavel PRIMARY KEY(id)
 );
 

@@ -10,6 +10,8 @@ import java.util.List;
 
 import br.com.ps.webacademy.beans.Aluno;
 import br.com.ps.webacademy.database.IDAO;
+import br.com.ps.webacademy.database.UtilDB;
+import br.com.ps.webacademy.util.Util;
 
 public class AlunoDAO implements IDAO<Aluno> {
 
@@ -29,7 +31,7 @@ public class AlunoDAO implements IDAO<Aluno> {
 			try {
 				sql = new StringBuilder();
 				sql.append("SELECT a.id, a.nome,a.email,a.matricula, a.cpf, a.rg, a.data_nascimento, ");
-				sql.append("a.sexo, a.celular, resp.id as resp_id, resp.nome as resp_nome ");
+				sql.append("a.sexo, a.celular, resp.id as resp_id, resp.nome as resp_nome, resp.email as email_resp, resp.celular as celular_resp  ");
 				sql.append("FROM aluno a ");
 				sql.append("LEFT JOIN responsavel resp ON(a.id_responsavel = resp.id) ");
 				sql.append("WHERE a.id = ?");
@@ -49,6 +51,8 @@ public class AlunoDAO implements IDAO<Aluno> {
 					aluno.setCelular(result.getString("celular"));
 					aluno.getResponsavel().setId(result.getInt("resp_id"));
 					aluno.getResponsavel().setNome(result.getString("resp_nome"));
+					aluno.getResponsavel().setEmail(result.getString("email_resp"));
+					aluno.getResponsavel().setCelular(result.getString("celular_resp"));
 					return aluno;
 				}
 			} catch (SQLException e) {
@@ -64,6 +68,7 @@ public class AlunoDAO implements IDAO<Aluno> {
 
 	@Override
 	public boolean inserir(Aluno aluno) throws SQLException {
+		boolean isInserido = false;
 		ResponsavelDAO responsavelDAO = null;
 		StringBuilder sql = null;
 		PreparedStatement statement = null;
@@ -88,7 +93,20 @@ public class AlunoDAO implements IDAO<Aluno> {
 					idAluno = result.getInt("id");
 					if (idAluno > 0) {
 						aluno.setId(idAluno);
-						return true;
+						// persistindo as informações do responsável
+						if (Util.naoNuloENaoVazio(aluno.getResponsavel().getNome())) {
+							responsavelDAO = new ResponsavelDAO(this.connection);
+							if (responsavelDAO.inserir(aluno.getResponsavel())) {
+								Util.limpaSB(sql);
+								UtilDB.fechar(statement);
+								sql.append("UPDATE aluno SET id_responsavel = ? WHERE id = ?");
+								statement = this.connection.prepareStatement(sql.toString());
+								statement.setInt(1, aluno.getResponsavel().getId());
+								statement.setInt(2, aluno.getId());
+								statement.executeUpdate();
+							}
+						}
+						isInserido = true;
 					}
 				}
 			}
@@ -97,24 +115,28 @@ public class AlunoDAO implements IDAO<Aluno> {
 			throw e;
 		} finally {
 			responsavelDAO = null;
-			sql.delete(0, sql.length());
+			Util.limpaSB(sql);
+			sql = null;
+			UtilDB.fechar(statement, result);
 			statement = null;
 			result = null;
 		}
 
-		return false;
+		return isInserido;
 	}
 
 	@Override
 	public boolean atualizar(Aluno aluno) throws SQLException {
-
+		boolean isAtulizado = false;
+		ResponsavelDAO responsavelDAO = null;
 		StringBuilder sql = null;
 		PreparedStatement statement = null;
+
 		try {
 			sql = new StringBuilder("UPDATE aluno SET ");
 			sql.append("nome = ?, email = ?, cpf = ?, rg = ?, data_nascimento = ?, ");
-			sql.append("sexo = ?, celular = ?, matricula = ?");
-			sql.append("WHERE id = ").append(aluno.getId());
+			sql.append("sexo = ?, celular = ?, matricula = ? ");
+			sql.append("WHERE id = ?");
 			statement = this.connection.prepareStatement(sql.toString());
 			statement.setString(1, aluno.getNome());
 			statement.setString(2, aluno.getEmail());
@@ -124,16 +146,40 @@ public class AlunoDAO implements IDAO<Aluno> {
 			statement.setString(6, String.valueOf(aluno.getSexo()));
 			statement.setString(7, aluno.getCelular());
 			statement.setString(8, aluno.getMatricula());
+			statement.setInt(9, aluno.getId());
 			if (statement.executeUpdate() == 1) {
-				return true;
+
+				// persistindo as informações do responsável
+				responsavelDAO = new ResponsavelDAO(this.connection);
+				if (aluno.getResponsavel().getId() == 0) {
+					if (Util.naoNuloENaoVazio(aluno.getResponsavel().getNome())) {
+						if (responsavelDAO.inserir(aluno.getResponsavel())) {
+							Util.limpaSB(sql);
+							UtilDB.fechar(statement);
+							sql.append("UPDATE aluno SET id_responsavel = ? WHERE id = ?");
+							statement = this.connection.prepareStatement(sql.toString());
+							statement.setInt(1, aluno.getResponsavel().getId());
+							statement.setInt(2, aluno.getId());
+							statement.executeUpdate();
+						}
+					}
+				} else {
+					if (Util.naoNuloENaoVazio(aluno.getResponsavel().getNome())) {
+						responsavelDAO.atualizar(aluno.getResponsavel());
+					}
+				}
+
+				isAtulizado = true;
 			}
 		} catch (SQLException e) {
 			throw e;
 		} finally {
-			sql.delete(0, sql.length());
+			Util.limpaSB(sql);
+			sql = null;
+			UtilDB.fechar(statement);
 			statement = null;
 		}
-		return false;
+		return isAtulizado;
 	}
 
 	@Override

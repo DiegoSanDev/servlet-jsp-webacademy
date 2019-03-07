@@ -149,11 +149,13 @@
 				    </div>
 				    <div class="form-group col-md-5">
 				      <label for="respEmail" class="col-form-label col-form-label-sm" >E-mail:</label>
-				      <input type="email" class="form-control form-control-sm" id="respEmail" name="respEmail" >
+				      <input type="email" class="form-control form-control-sm" 
+				      		 id="respEmail" name="respEmail" value="${aluno.responsavel.email}">
 				    </div>
 				    <div class="form-group col-md-2">
 				      <label for="respCelular" class="col-form-label col-form-label-sm" >Celular:</label>
-				      <input type="tel" class="form-control form-control-sm" id="respCelular" name="respCelular" >
+				      <input type="tel" class="form-control form-control-sm" 
+				      	     id="respCelular" name="respCelular" value="${aluno.responsavel.celular}" >
 				    </div>
 				  </div>
 			   </div>
