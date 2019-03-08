@@ -66,7 +66,7 @@
 					    		<span>Cadastro de aluno</span>
 					    	</div>
 					    	<div class="col-md-1 offset-md-9">
-					    		<a class="btn btn-primary btn-sm" href="<%=request.getContextPath()%>/alunoconsulta">
+					    		<a class="btn btn-primary btn-sm" href="<%=request.getContextPath()%>/alunoconsulta?acao=consulta">
 					    			<i class="fas fa-list-ul"></i> Consulta
 					    		</a>
 					    	</div>

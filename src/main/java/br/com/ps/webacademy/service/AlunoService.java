@@ -10,6 +10,7 @@ import br.com.ps.webacademy.dao.AlunoDAO;
 import br.com.ps.webacademy.database.Conexao;
 import br.com.ps.webacademy.database.Transacao;
 import br.com.ps.webacademy.exception.RegraNegocioException;
+import br.com.ps.webacademy.filtro.AlunoFiltro;
 
 public class AlunoService implements IService<Aluno> {
 
@@ -87,6 +88,26 @@ public class AlunoService implements IService<Aluno> {
 		} finally {
 			alunoDAO = null;
 			Conexao.fechar();
+		}
+		return null;
+	}
+
+	public List<Aluno> pesquisar(AlunoFiltro filtros)throws SQLException {
+		List<Aluno> alunos = null;
+		AlunoDAO alunoDAO = null;
+		if (filtros != null) {
+			try {
+				alunoDAO = new AlunoDAO(Conexao.abrir());
+				alunos = alunoDAO.pesquisar(filtros);
+				if(!alunos.isEmpty()) {
+					return alunos;
+				}
+			}catch(SQLException e) {
+				throw e;
+			}finally {
+				Conexao.fechar();
+				alunoDAO = null;
+			}
 		}
 		return null;
 	}

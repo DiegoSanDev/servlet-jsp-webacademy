@@ -76,8 +76,54 @@
 				    </div>
 			  </div>
 			</div>
+			
 			<div style="margin-top: 10px;">
-				<table data-toggle="table"
+			     <p>
+				   <button class="btn btn-primary btn-sm" type="button" 
+				   		   data-toggle="collapse" data-target="#collapseExample" id="btn-filtro"
+				   		   aria-expanded="false" aria-controls="collapseExample" onclick="exibirOuOcultaFiltros()">
+				     <i class="fas fa-filter"></i> <span id="nomeBtn" >Exibir filtros</span> 
+				   </button>
+				  </p>
+				  <div class="collapse" id="collapseExample">
+				    <div class="card card-body">
+						  <div class="form-row">
+						  	<div class="form-group col-md-1">
+						  		<label for="idPesquisa" class="col-form-label col-form-label-sm" >ID:</label>
+				      			<input type="text" class="form-control form-control-sm" id="idPesquisa" name="idPesquisa">
+						    </div>
+						    <div class="form-group col-md-3">
+						  		<label for="matriculaPesquisa" class="col-form-label col-form-label-sm" >Matrícula:</label>
+				      			<input type="text" class="form-control form-control-sm" id="matriculaPesquisa" name="matriculaPesquisa">
+						    </div>
+						  	<div class="form-group col-md-4">
+						  		<label for="nomePesquisa" class="col-form-label col-form-label-sm" >Nome:</label>
+				      			<input type="text" class="form-control form-control-sm" id="nomePesquisa" name="nomePesquisa">
+						    </div>
+						    <div class="form-group col-md-4">
+						      	<label for="emailPesquisa" class="col-form-label col-form-label-sm" >E-mail:</label>
+				      		 	<input type="email" class="form-control form-control-sm" id="emailPesquisa" name="emailPesquisa">
+						    </div>
+						  </div>
+						  <div class="form-row">
+						  	<div class="form-group col-md-3">
+						  		<label for="dataInicioPesquisa" class="col-form-label col-form-label-sm" >Data inicio:</label>
+				      			<input type="date" class="form-control form-control-sm" id="dataInicioPesquisa" name="dataInicioPesquisa">
+						    </div>
+						    <div class="form-group col-md-3">
+						  		<label for="dataInicioPesquisa" class="col-form-label col-form-label-sm" >Data fim:</label>
+				      			<input type="date" class="form-control form-control-sm" id="dataFimPesquisa" name="dataFimPesquisa">
+						    </div>
+						  </div>
+					    	<button type="button" onclick="pesquisar()" class="btn btn-primary btn-sm">
+					   			<i class="fas fa-search"></i> Pesquisar
+					   		</button>
+				    </div> 
+				  </div>
+			  </div>
+			<div id="alunoLista"></div>
+			<div style="margin-top: 10px;">
+				<table  data-toggle="table"
 					    data-show-columns="true"
 					   class="table-striped table-sm">
 					<thead class="text-white" style="background-color: #18227c" >
@@ -120,9 +166,32 @@
 			
 		</div>
 		
-		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 		<script src="https://unpkg.com/bootstrap-table@1.13.5/dist/bootstrap-table.min.js"></script>
+		
+		<script type="text/javascript">
+
+			function pesquisar(){
+				/*filtros*/
+				let id = $("#idPesquisa").val();
+				let nome = $("#nomePesquisa").val();
+				let email = $("#emailPesquisa").val();
+				let matricula = $("#matriculaPesquisa").val();
+				let dataInicio = $("#dataInicioPesquisa").val();
+				let dataFim = $("#dataFimPesquisa").val();
+				let param = "idPesquisa="+id+"&nomePesquisa="+nome+"&emailPesquisa="+email+"&matriculaPesquisa="+matricula;
+				param +="&dataInicioPesquisa="+dataInicio+"&dataFimPesquisa="+dataFim;
+				/*requisição*/
+				document.location.replace("./alunoconsulta?acao=pesquisa&"+param);
+				
+			}
+		
+			function exibirOuOcultaFiltros(){
+				var isOcultar = document.getElementById('btn-filtro').getAttribute('aria-expanded');
+				$("#nomeBtn").text(isOcultar == 'false' ? "Ocultar filtros" : "Exibir filtros");
+			}
+		</script>
 	</body>
 </html>

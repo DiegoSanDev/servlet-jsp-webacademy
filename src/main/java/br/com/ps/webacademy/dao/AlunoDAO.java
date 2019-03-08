@@ -11,6 +11,7 @@ import java.util.List;
 import br.com.ps.webacademy.beans.Aluno;
 import br.com.ps.webacademy.database.IDAO;
 import br.com.ps.webacademy.database.UtilDB;
+import br.com.ps.webacademy.filtro.AlunoFiltro;
 import br.com.ps.webacademy.util.Util;
 
 public class AlunoDAO implements IDAO<Aluno> {
@@ -263,6 +264,74 @@ public class AlunoDAO implements IDAO<Aluno> {
 			statement = null;
 			result = null;
 			aluno = null;
+		}
+		return alunos;
+	}
+
+	public List<Aluno> pesquisar(AlunoFiltro alunoFiltro) throws SQLException {
+
+		List<Aluno> alunos = new ArrayList<>();
+		Aluno aluno = null;
+		StringBuilder sql = null;
+		StringBuilder condicoes = null;
+		PreparedStatement statement = null;
+		ResultSet result = null;
+		if (alunoFiltro != null) {
+			try {
+				sql = new StringBuilder();
+				condicoes = new StringBuilder();
+				
+				if (alunoFiltro.getDataInicio() != null && alunoFiltro.getDataFim() != null) {
+					condicoes.append("AND a.data_cadastro BETWEEN ");
+					condicoes.append("'").append(alunoFiltro.getDataInicio()).append("' AND ");
+					condicoes.append("'").append(alunoFiltro.getDataFim()).append("'");
+				}
+
+				if (alunoFiltro.getId() > 0) {
+					condicoes.append(" AND a.id = ").append(alunoFiltro.getId());
+				}
+				if (Util.naoNuloENaoVazio(alunoFiltro.getNome())) {
+					condicoes.append(" AND a.nome LIKE").append("'%").append(alunoFiltro.getNome()).append("%'");
+				}
+
+				if (Util.naoNuloENaoVazio(alunoFiltro.getMatricula())) {
+					condicoes.append(" AND a.matricula = ").append("'").append(alunoFiltro.getMatricula()).append("'");
+				}
+
+				if (Util.naoNuloENaoVazio(alunoFiltro.getEmail())) {
+					condicoes.append(" AND a.email = ").append("'").append(alunoFiltro.getEmail()).append("'");
+				}
+
+				sql.append("SELECT a.id,a.nome,a.email,a.matricula, a.data_cadastro, ");
+				sql.append("resp.id as id_resp,resp.nome as nome_resp ");
+				sql.append("FROM aluno a ");
+				sql.append("LEFT JOIN responsavel resp ON (a.id_responsavel = resp.id) ");
+				sql.append("WHERE true ").append(condicoes);
+				sql.append(" ORDER BY a.id ASC");
+
+				statement = this.connection.prepareStatement(sql.toString());
+				result = statement.executeQuery();
+				while (result.next()) {
+					aluno = new Aluno();
+					aluno.setId(result.getInt("id"));
+					aluno.setNome(result.getString("nome"));
+					aluno.setMatricula(result.getString("matricula"));
+					aluno.setEmail(result.getString("email"));
+					aluno.getResponsavel().setId(result.getInt("id_resp"));
+					aluno.getResponsavel().setNome(result.getString("nome_resp"));
+					alunos.add(aluno);
+				}
+			} catch (SQLException ex) {
+				throw ex;
+			} finally {
+				Util.limpaSB(sql);
+				Util.limpaSB(condicoes);
+				sql = null;
+				condicoes = null;
+				UtilDB.fechar(statement, result);
+				alunoFiltro = null;
+				aluno = null;
+			}
 		}
 		return alunos;
 	}
