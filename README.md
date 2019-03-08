@@ -49,4 +49,4 @@ Segundo Heuser (2010, p.25), um modelo conceitual, “é uma descrição do banc
  Tela - Cadastro de Aluno
  <img src="https://user-images.githubusercontent.com/48092812/53650896-54c1ff80-3c24-11e9-8fb5-517d4e71239a.jpg">
  Tela - Protótipo Consulta de Alunos
- <img src="https://user-images.githubusercontent.com/48092812/53957470-342ef500-40bd-11e9-8bce-2c5f82797466.jpg">
+ <img src="https://user-images.githubusercontent.com/48092812/54037916-08377080-419e-11e9-9f3e-32962800a3c4.jpg">
