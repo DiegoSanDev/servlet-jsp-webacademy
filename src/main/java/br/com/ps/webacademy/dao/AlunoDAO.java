@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.ps.webacademy.beans.Aluno;
+import br.com.ps.webacademy.database.Conexao;
 import br.com.ps.webacademy.database.IDAO;
 import br.com.ps.webacademy.database.UtilDB;
 import br.com.ps.webacademy.filtro.AlunoFiltro;
@@ -47,7 +48,7 @@ public class AlunoDAO implements IDAO<Aluno> {
 					aluno.setMatricula(result.getString("matricula"));
 					aluno.setCpf(result.getString("cpf"));
 					aluno.setRg(result.getString("rg"));
-					aluno.setDataNascimento((result.getDate("data_nascimento")) != null ? result.getDate("data_nascimento").toLocalDate() : null);
+					aluno.setDataNascimento((result.getDate("data_nascimento")) != null ? result.getDate("data_nascimento").toLocalDate(): null);
 					aluno.setSexo(result.getString("sexo").charAt(0));
 					aluno.setCelular(result.getString("celular"));
 					aluno.getResponsavel().setId(result.getInt("resp_id"));
@@ -210,14 +211,22 @@ public class AlunoDAO implements IDAO<Aluno> {
 	public boolean deletarPoID(int id) throws SQLException {
 		StringBuilder sql = null;
 		PreparedStatement statement = null;
+		ResponsavelDAO responsavelDAO = null;
+		Aluno aluno = null;
 		try {
-			sql = new StringBuilder();
-			sql.append("DELETE FROM aluno ");
-			sql.append("WHERE id = ?");
-			statement = this.connection.prepareStatement(sql.toString());
-			statement.setInt(1, id);
-			if (!statement.execute()) {
-				return true;
+			responsavelDAO = new ResponsavelDAO(Conexao.getConexao());
+			aluno = buscarPoId(id);
+			if(aluno != null) {
+				sql = new StringBuilder();
+				sql.append("DELETE FROM aluno ");
+				sql.append("WHERE id = ?");
+				statement = this.connection.prepareStatement(sql.toString());
+				statement.setInt(1, aluno.getId());
+				if (!statement.execute()) {
+					if(responsavelDAO.deletarPoID(aluno.getResponsavel().getId())){
+						return true;
+					}
+				}
 			}
 		} catch (SQLException e) {
 			throw e;
@@ -252,7 +261,7 @@ public class AlunoDAO implements IDAO<Aluno> {
 					aluno.setEmail(result.getString("email"));
 					aluno.setNome(result.getString("nome"));
 					aluno.setMatricula(result.getString("matricula"));
-					aluno.setDataNascimento(result.getDate("data_nascimento") != null ? result.getDate("data_nascimento").toLocalDate() : null);
+					aluno.setDataNascimento(result.getDate("data_nascimento") != null ? result.getDate("data_nascimento").toLocalDate(): null);
 					aluno.getResponsavel().setId(result.getInt("id_resp"));
 					aluno.getResponsavel().setNome(result.getString("nome_resp"));
 					alunos.add(aluno);
@@ -281,7 +290,7 @@ public class AlunoDAO implements IDAO<Aluno> {
 			try {
 				sql = new StringBuilder();
 				condicoes = new StringBuilder();
-				
+
 				if (alunoFiltro.getDataInicio() != null && alunoFiltro.getDataFim() != null) {
 					condicoes.append("AND a.data_cadastro BETWEEN ");
 					condicoes.append("'").append(alunoFiltro.getDataInicio()).append("' AND ");
@@ -321,7 +330,7 @@ public class AlunoDAO implements IDAO<Aluno> {
 					aluno.setDataNascimento(result.getDate("data_nascimento") != null ? result.getDate("data_nascimento").toLocalDate() : null);
 					aluno.getResponsavel().setId(result.getInt("id_resp"));
 					aluno.getResponsavel().setNome(result.getString("nome_resp"));
-					
+
 					alunos.add(aluno);
 				}
 			} catch (SQLException ex) {
