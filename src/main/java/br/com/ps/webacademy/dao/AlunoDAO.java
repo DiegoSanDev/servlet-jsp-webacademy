@@ -238,7 +238,7 @@ public class AlunoDAO implements IDAO<Aluno> {
 		List<Aluno> alunos = new ArrayList<>();
 		try {
 			sql = new StringBuilder();
-			sql.append("SELECT a.id,a.nome,a.email,a.matricula,resp.id as id_resp,resp.nome as nome_resp ");
+			sql.append("SELECT a.id,a.nome,a.email,a.matricula,a.data_nascimento,resp.id as id_resp,resp.nome as nome_resp ");
 			sql.append("FROM aluno a ");
 			sql.append("LEFT JOIN responsavel resp ON (a.id_responsavel = resp.id) ");
 			sql.append("ORDER BY a.id ASC");
@@ -252,6 +252,7 @@ public class AlunoDAO implements IDAO<Aluno> {
 					aluno.setEmail(result.getString("email"));
 					aluno.setNome(result.getString("nome"));
 					aluno.setMatricula(result.getString("matricula"));
+					aluno.setDataNascimento(result.getDate("data_nascimento") != null ? result.getDate("data_nascimento").toLocalDate() : null);
 					aluno.getResponsavel().setId(result.getInt("id_resp"));
 					aluno.getResponsavel().setNome(result.getString("nome_resp"));
 					alunos.add(aluno);
@@ -302,7 +303,7 @@ public class AlunoDAO implements IDAO<Aluno> {
 					condicoes.append(" AND a.email = ").append("'").append(alunoFiltro.getEmail()).append("'");
 				}
 
-				sql.append("SELECT a.id,a.nome,a.email,a.matricula, a.data_cadastro, ");
+				sql.append("SELECT a.id,a.nome,a.email,a.matricula, a.data_cadastro,a.data_nascimento, ");
 				sql.append("resp.id as id_resp,resp.nome as nome_resp ");
 				sql.append("FROM aluno a ");
 				sql.append("LEFT JOIN responsavel resp ON (a.id_responsavel = resp.id) ");
@@ -317,8 +318,10 @@ public class AlunoDAO implements IDAO<Aluno> {
 					aluno.setNome(result.getString("nome"));
 					aluno.setMatricula(result.getString("matricula"));
 					aluno.setEmail(result.getString("email"));
+					aluno.setDataNascimento(result.getDate("data_nascimento") != null ? result.getDate("data_nascimento").toLocalDate() : null);
 					aluno.getResponsavel().setId(result.getInt("id_resp"));
 					aluno.getResponsavel().setNome(result.getString("nome_resp"));
+					
 					alunos.add(aluno);
 				}
 			} catch (SQLException ex) {

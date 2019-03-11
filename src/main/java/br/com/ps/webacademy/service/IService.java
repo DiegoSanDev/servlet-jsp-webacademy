@@ -12,4 +12,6 @@ public interface IService<T> {
 
 	List<T> todos();
 
+	boolean excluirPoId(int id) throws RegraNegocioException;
+
 }

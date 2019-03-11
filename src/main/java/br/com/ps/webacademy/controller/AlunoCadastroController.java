@@ -31,6 +31,11 @@ public class AlunoCadastroController extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		processaRequisicao(req, resp);
 	}
+	
+	@Override
+	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		processaRequisicao(req, resp);
+	}
 
 	private void processaRequisicao(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -41,16 +46,17 @@ public class AlunoCadastroController extends HttpServlet {
 			switch (acao) {
 			case SALVAR:
 				if (doSalvarAluno(request, response)) {
-					response.sendRedirect("alunoconsulta");
+					response.sendRedirect("alunoconsulta?acao=consulta");
 				} else {
 					RequestDispatcher dispatcher = request.getRequestDispatcher("/aluno/erro-cadastro.jsp");
 					dispatcher.forward(request, response);
 				}
 				break;
 			case EDITAR:
-				this.carregar(request, response);
+				this.doCarregar(request, response);
 				break;
 			case EXCLUIR:
+				doExcluir(request, response);
 				break;
 			}
 		}
@@ -92,8 +98,30 @@ public class AlunoCadastroController extends HttpServlet {
 		}
 		return isSalvo;
 	}
+	
+	private boolean doExcluir (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		boolean isExcluiu = false;
+		AlunoService alunoService = null;
+		String idAluno = request.getParameter("idAluno");
+		int id = Integer.parseInt((idAluno != null && !idAluno.isEmpty()) ? idAluno : "0" );
+		try {
+			alunoService = new AlunoService();
+			
+			if(alunoService.excluirPoId(id)) {
+				isExcluiu = true;
+			}
+			
+		}catch(RegraNegocioException e) {
+			e.printStackTrace();
+		}finally {
+			alunoService = null;
+			idAluno = null;
+		}
+		
+		return isExcluiu;
+	}
 
-	private void carregar(HttpServletRequest request, HttpServletResponse response)
+	private void doCarregar(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		Aluno aluno = null;
 		AlunoService alunoService = null;

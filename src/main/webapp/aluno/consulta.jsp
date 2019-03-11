@@ -67,10 +67,17 @@
 					    	<div class="col-md-2">
 					    		<span>Consulta de alunos</span>
 					    	</div>
-					    	<div class="col-md-2 offset-md-8">
-					    		<a class="btn btn-primary btn-sm" href="<%=request.getContextPath()%>/aluno/cadastro.jsp">
-					    			<i class="fas fa-save"></i> Novo Aluno
-					    		</a>
+					    	<div class="col-md-10">
+					    		<div style="float: right;">
+		    						<a class="btn btn-primary btn-sm" href="<%=request.getContextPath()%>/aluno/cadastro.jsp">
+						    			<i class="fas fa-save"></i> Novo Aluno
+						    		</a>
+						    		<button class="btn btn-primary btn-sm" type="button" 
+								   		   data-toggle="collapse" data-target="#collapseExample" id="btn-filtro"
+								   		   aria-expanded="true" aria-controls="collapseExample" onclick="exibirOuOcultaFiltros()">
+								          <i class="fas fa-filter"></i> <span id="nomeBtn" >Exibir filtros</span> 
+								     </button>
+							     </div>
 					    	</div>
 					    </div>
 				    </div>
@@ -78,13 +85,6 @@
 			</div>
 			
 			<div style="margin-top: 10px;">
-			     <p>
-				   <button class="btn btn-primary btn-sm" type="button" 
-				   		   data-toggle="collapse" data-target="#collapseExample" id="btn-filtro"
-				   		   aria-expanded="false" aria-controls="collapseExample" onclick="exibirOuOcultaFiltros()">
-				     <i class="fas fa-filter"></i> <span id="nomeBtn" >Exibir filtros</span> 
-				   </button>
-				  </p>
 				  <div class="collapse" id="collapseExample">
 				    <div class="card card-body">
 						  <div class="form-row">
@@ -148,8 +148,8 @@
 					          	   title="Editar">
 					          		<i class="fas fa-edit"></i>
 					          	</a>
-					          	<a style="margin-left: 10px; margin-right: 10px;" href="<%=request.getContextPath()%>/alunocadastro?acao=excluir&idaluno=${aluno.id}" 
-					          	   title="Excluir">
+					          	<a style="margin-left: 10px; margin-right: 10px;" href="#" 
+					          			  onclick="javascript:exibirModalExcluir(${aluno.id})"	title="Excluir">
 					          		<i class="fas fa-user-times"></i>
 					          	</a>
 					          </td>
@@ -163,7 +163,28 @@
 					</tbody>
 				</table>
 			</div>
-			
+		</div>
+
+		<!-- modal execluir -->
+		<div class="modal fade" id="modalExcluir" tabindex="-1" role="dialog" aria-labelledby="modalExcluir" aria-hidden="true">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel">ATENÇÃO!</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        Deseja realmente excluir esse aluno?
+		        <input type="hidden" id="idAlunoExcluir" name="idAlunoExcluir">
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+		        <button type="button" class="btn btn-danger" onclick="excluirAluno()" >Excluir</button>
+		      </div>
+		    </div>
+		  </div>
 		</div>
 		
 		<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -172,7 +193,29 @@
 		<script src="https://unpkg.com/bootstrap-table@1.13.5/dist/bootstrap-table.min.js"></script>
 		
 		<script type="text/javascript">
-
+			
+			function exibirModalExcluir(idAluno){
+				if(idAluno > 0){
+					$("#idAlunoExcluir").val(idAluno);
+					$("#modalExcluir").modal("show");
+				}
+			}
+			
+			function excluirAluno(){
+				let idAluno = $("#idAlunoExcluir").val();
+				if(idAluno > 0){
+					$.ajax({
+						url : './alunocadastro?acao=excluir&idAluno='+idAluno,
+						type : 'DELETE',
+						success : function(data){
+							$("#modalExcluir").modal("hide");
+							document.location.replace("./alunoconsulta?acao=consulta");
+						}
+						
+					});
+				}
+			}
+		
 			function pesquisar(){
 				/*filtros*/
 				let id = $("#idPesquisa").val();
@@ -185,7 +228,6 @@
 				param +="&dataInicioPesquisa="+dataInicio+"&dataFimPesquisa="+dataFim;
 				/*requisição*/
 				document.location.replace("./alunoconsulta?acao=pesquisa&"+param);
-				
 			}
 		
 			function exibirOuOcultaFiltros(){

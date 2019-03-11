@@ -20,7 +20,7 @@ public class AlunoService implements IService<Aluno> {
 		AlunoDAO alunoDAO = null;
 		if (id > 0) {
 			try {
-				alunoDAO = new AlunoDAO(Conexao.abrir());
+				alunoDAO = new AlunoDAO(Conexao.getConexao());
 				aluno = alunoDAO.buscarPoId(id);
 				if (aluno != null) {
 					return aluno;
@@ -43,7 +43,7 @@ public class AlunoService implements IService<Aluno> {
 	@Override
 	public boolean salvar(Aluno aluno) throws RegraNegocioException {
 		boolean isSalvo = false;
-		Connection conexao = Conexao.abrir();
+		Connection conexao = Conexao.getConexao();
 		AlunoDAO alunoDAO = null;
 		if (aluno != null) {
 			try {
@@ -78,7 +78,7 @@ public class AlunoService implements IService<Aluno> {
 	public List<Aluno> todos() {
 		AlunoDAO alunoDAO = null;
 		try {
-			alunoDAO = new AlunoDAO(Conexao.abrir());
+			alunoDAO = new AlunoDAO(Conexao.getConexao());
 			List<Aluno> alunos = alunoDAO.todos();
 			if (alunos != null && !alunos.isEmpty()) {
 				return alunos;
@@ -97,7 +97,7 @@ public class AlunoService implements IService<Aluno> {
 		AlunoDAO alunoDAO = null;
 		if (filtros != null) {
 			try {
-				alunoDAO = new AlunoDAO(Conexao.abrir());
+				alunoDAO = new AlunoDAO(Conexao.getConexao());
 				alunos = alunoDAO.pesquisar(filtros);
 				if(!alunos.isEmpty()) {
 					return alunos;
@@ -111,6 +111,30 @@ public class AlunoService implements IService<Aluno> {
 		}
 		return null;
 	}
+
+	@Override
+	public boolean excluirPoId(int id) throws RegraNegocioException {
+		AlunoDAO alunoDAO = null;
+		boolean isExcluiu = false;
+		if(id > 0) {
+			try {
+				alunoDAO = new AlunoDAO(Conexao.getConexao());
+				Transacao.iniciar(Conexao.getConexao());
+				if(alunoDAO.deletarPoID(id)) {
+					isExcluiu = true;
+				}
+				Transacao.finalizar(Conexao.getConexao());
+			}catch (SQLException e) {
+				Transacao.cancelar(Conexao.getConexao());
+				e.printStackTrace();
+			}finally {
+				alunoDAO = null;
+				Conexao.fechar();
+			}
+		}
+		return isExcluiu;
+	}
+	
 
 	private String gerarMatricula(Aluno aluno) {
 		String matricula = "";
