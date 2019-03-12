@@ -27,3 +27,11 @@ CREATE TABLE responsavel(
 ALTER TABLE aluno ADD FOREIGN KEY (id_responsavel) 
 REFERENCES responsavel(id);
 
+CREATE TABLE curso(
+    id SERIAL NOT NULL,
+    nome VARCHAR(200) NOT NULL,
+    descricao TEXT,
+    data_cadastro DATE NOT NULL,
+    data_alteracao DATE,
+    CONSTRAINT pk_curso PRIMARY KEY(id)
+);
