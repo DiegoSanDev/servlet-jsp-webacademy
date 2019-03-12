@@ -1,6 +1,7 @@
 package br.com.ps.webacademy.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -60,10 +61,11 @@ public class CursoDAO implements IDAO<Curso> {
 
 		if (curso != null) {
 			try {
-				sql = new StringBuilder("INSERT INTO curso(nome,descricao) VALUES(?,?)");
+				sql = new StringBuilder("INSERT INTO curso(nome,descricao,data_cadastro) VALUES(?,?,?)");
 				statement = this.conexao.prepareStatement(sql.toString(), PreparedStatement.RETURN_GENERATED_KEYS);
 				statement.setString(1, curso.getNome());
 				statement.setString(2, curso.getDescricao());
+				statement.setDate(3, Date.valueOf(curso.getDataCadastro()));
 				if (statement.executeUpdate() == 1) {
 					result = statement.getGeneratedKeys();
 					if (result.next()) {

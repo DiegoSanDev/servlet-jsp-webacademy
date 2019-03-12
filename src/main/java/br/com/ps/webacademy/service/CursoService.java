@@ -1,6 +1,7 @@
 package br.com.ps.webacademy.service;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 import br.com.ps.webacademy.beans.Curso;
@@ -33,7 +34,6 @@ public class CursoService implements IService<Curso> {
 				Conexao.fechar();
 			}
 		}
-
 		return null;
 	}
 
@@ -46,10 +46,12 @@ public class CursoService implements IService<Curso> {
 				cursoDAO = new CursoDAO(Conexao.getConexao());
 				Transacao.iniciar(Conexao.getConexao());
 				if (curso.getId() == 0) {
-					if (cursoDAO.inserir(curso)) {
+					curso.setDataCadastro(LocalDate.now());
+					if (cursoDAO.inserir(curso)) {	
 						isSalvo = true;
 					}
 				} else {
+					curso.setDataAlteracao(LocalDate.now());
 					if (cursoDAO.atualizar(curso)) {
 						isSalvo = true;
 					}
@@ -87,5 +89,4 @@ public class CursoService implements IService<Curso> {
 	public boolean excluirPoId(int id) throws RegraNegocioException {
 		return false;
 	}
-
 }
